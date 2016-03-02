@@ -65,6 +65,31 @@ STATIC_FOLDER = str_env('STATIC_FOLDER', 'public')
 
 APPLICATION_ENV = str_env('APPLICATION_ENV', 'development')
 
+# Authentication method switcher
+
+USER_AUTH_MODULE = str_env('USER_AUTH_MODULE', 'google')
+
+# SAML authentication
+# SP: Service Provider (i.e. Confidant)
+# IdP: Identity Provider
+
+# Root URL that browsers use to hit Confidant
+SAML_CONFIDANT_URL_ROOT = str_env('SAML_CONFIDANT_URL_ROOT')
+# Path to SP X.509 certificate file
+SAML_SP_CERT_FILE = str_env('SAML_SP_CERT_FILE')
+# Path to SP private key file
+SAML_SP_KEY_FILE = str_env('SAML_SP_KEY_FILE')
+# SAML IdP Entity ID (looks like a URL)
+SAML_IDP_ENTITY_ID = str_env('SAML_IDP_ENTITY_ID')
+# SAML IdP Single Sign On URL
+SAML_IDP_SIGNON_URL = str_env('SAML_IDP_SIGNON_URL')
+# SAML IdP Single Logout URL, optional, only if IDP supports its
+SAML_IDP_LOGOUT_URL = str_env('SAML_IDP_LOGOUT_URL')
+# SAML IdP X.509 Certificate, base64 encoded
+SAML_IDP_CERT = str_env('SAML_IDP_CERT')
+# SAML Debug mode
+SAML_DEBUG = bool_env('SAML_DEBUG', False)
+
 # Google authentication
 
 # A yaml file, with email: name mappings that can be used for restricting

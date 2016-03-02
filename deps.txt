@@ -1,0 +1,2 @@
+python-dev
+libxmlsec1-dev
