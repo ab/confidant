@@ -3,9 +3,6 @@ import yaml
 import random
 import logging
 
-from authomatic import Authomatic
-from authomatic.providers import oauth2
-from authomatic.adapters import WerkzeugAdapter
 from flask import abort, request,  make_response, session, g
 from flask import redirect, url_for
 from werkzeug.security import safe_str_cmp
@@ -15,21 +12,35 @@ from confidant import app
 from confidant import keymanager
 from confidant import stats
 
-authomatic_config = {
-    'google': {
-        'class_': oauth2.Google,
-        'consumer_key': app.config['GOOGLE_OAUTH_CLIENT_ID'],
-        'consumer_secret': app.config['GOOGLE_OAUTH_CONSUMER_SECRET'],
-        'scope': [
-            'https://www.googleapis.com/auth/userinfo.profile',
-            'https://www.googleapis.com/auth/userinfo.email'
-        ]
+AUTH_MODULE_NAME = app.config['USER_AUTH_MODULE'].lower()
+if AUTH_MODULE_NAME == 'oauth':
+    from authomatic import Authomatic
+    from authomatic.providers import oauth2
+    from authomatic.adapters import WerkzeugAdapter
+
+    authomatic_config = {
+        'google': {
+            'class_': oauth2.Google,
+            'consumer_key': app.config['GOOGLE_OAUTH_CLIENT_ID'],
+            'consumer_secret': app.config['GOOGLE_OAUTH_CONSUMER_SECRET'],
+            'scope': [
+                'https://www.googleapis.com/auth/userinfo.profile',
+                'https://www.googleapis.com/auth/userinfo.email'
+            ]
+        }
     }
-}
-_authomatic = Authomatic(
-    authomatic_config,
-    app.config['AUTHOMATIC_SALT']
-)
+    _authomatic = Authomatic(
+        authomatic_config,
+        app.config['AUTHOMATIC_SALT']
+    )
+
+elif AUTH_MODULE_NAME == 'saml':
+    from onelogin.saml2.auth import OneLogin_Saml2_Auth
+    from onelogin.saml2.util import OneLogin_Saml2_Utils
+
+    saml_config = {
+    }
+
 
 if app.config.get('USERS_FILE'):
     with open(app.config.get('USERS_FILE'), 'r') as f:
